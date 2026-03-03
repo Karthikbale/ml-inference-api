@@ -3,13 +3,16 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ml-inference-api"
+        SONAR_TOKEN = credentials('sonar')
     }
 
     stages {
 
-        stage('Clone') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/Karthikbale/ml-inference-api.git'
+                git branch: 'main',
+                    credentialsId: 'Git',
+                    url: 'https://github.com/Karthikbale/ml-inference-api.git'
             }
         }
 
@@ -21,7 +24,7 @@ pipeline {
                     -Dsonar.projectKey=ml-project \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=http://sonarqube:9000 \
-                    -Dsonar.login=sonar
+                    -Dsonar.login=${SONAR_TOKEN}
                     """
                 }
             }
@@ -29,7 +32,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh "docker build -t ${IMAGE_NAME} ."
             }
         }
 
@@ -37,9 +40,18 @@ pipeline {
             steps {
                 sh '''
                 docker rm -f ml-container || true
-                docker run -d -p 8000:8000 --name ml-container $IMAGE_NAME
+                docker run -d -p 8000:8000 --name ml-container ml-inference-api
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline executed successfully 🚀"
+        }
+        failure {
+            echo "Pipeline failed ❌"
         }
     }
 }
