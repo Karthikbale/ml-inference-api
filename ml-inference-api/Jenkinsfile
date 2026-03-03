@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "ml-inference-api"
+    }
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git 'https://github.com/Karthikbale/ml-inference-api.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('Sonar') {
+                    sh """
+                    sonar-scanner \
+                    -Dsonar.projectKey=ml-project \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://sonarqube:9000 \
+                    -Dsonar.login=sonar
+                    """
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                docker rm -f ml-container || true
+                docker run -d -p 8000:8000 --name ml-container $IMAGE_NAME
+                '''
+            }
+        }
+    }
+}
