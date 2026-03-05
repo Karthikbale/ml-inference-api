@@ -12,7 +12,7 @@ VScode
 
 2️⃣ Go to Desktop
 
-cd Desktop
+cd Desktop                      //command
 
 3️⃣ Create Project Folder
 
@@ -184,4 +184,5 @@ You should get something like:
 }
 
 🎉 That means your ML model is now serving predictions via API.
+
 
