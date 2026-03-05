@@ -6,6 +6,13 @@ import numpy as np
 # Load trained model
 model = joblib.load("model.pkl")
 
+# Flower label mapping
+label_map = {
+    0: "setosa",
+    1: "versicolor",
+    2: "virginica"
+}
+
 # Create FastAPI instance
 app = FastAPI()
 
@@ -24,13 +31,19 @@ def read_root():
 # Prediction endpoint
 @app.post("/predict")
 def predict(data: IrisInput):
-    input_array = np.array([[ 
+
+    input_array = np.array([[
         data.sepal_length,
         data.sepal_width,
         data.petal_length,
         data.petal_width
     ]])
-    
-    prediction = model.predict(input_array)
-    
+
+    prediction = model.predict(input_array)[0]
+
+    flower_name = label_map[int(prediction)]
+
+    return {
+        "prediction": flower_name
+    }
     return {"prediction": int(prediction[0])}
