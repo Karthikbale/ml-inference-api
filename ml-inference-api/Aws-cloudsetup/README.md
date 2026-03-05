@@ -232,3 +232,157 @@ http://EC2_IP:8000/docs
 
 Swagger UI will appear.
 
+**Monitoring Tools setup**
+
+**1️⃣ Install Jenkins Prometheus Plugin**
+
+In Jenkins
+
+Go to:
+
+Manage Jenkins
+→ Plugins
+→ Available Plugins
+→ Search: Prometheus Metrics
+
+Install:
+
+Prometheus Metrics Plugin
+
+After installation Jenkins exposes metrics at:
+
+http://EC2-IP:8080/prometheus
+
+Test it in browser.
+
+You should see metrics like:
+
+jenkins_job_build_duration_seconds
+jenkins_executor_count
+jvm_memory_bytes_used
+
+2️⃣ Update Prometheus Configuration
+
+Edit your prometheus.yml
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"]
+
+  - job_name: "jenkins"
+    metrics_path: /prometheus
+    static_configs:
+      - targets: ["jenkins:8080"]
+
+Explanation:
+
+Job	What it monitors
+prometheus	Prometheus itself
+node-exporter	EC2 system metrics
+jenkins	Jenkins build metrics
+3️⃣ Restart Prometheus
+
+After saving config:
+
+docker restart prometheus
+
+Then open:
+
+http://EC2-IP:9090/targets
+
+You should see:
+
+prometheus → UP
+node-exporter → UP
+jenkins → UP
+4️⃣ Connect Grafana to Prometheus
+
+Open Grafana
+
+http://EC2-IP:3000
+
+Login:
+
+admin
+admin
+
+Add datasource:
+
+Settings
+→ Data Sources
+→ Prometheus
+
+URL:
+
+http://prometheus:9090
+
+Click:
+
+Save & Test
+5️⃣ Import Jenkins Dashboard
+
+Import Jenkins monitoring dashboard.
+
+In Grafana:
+
++ → Import
+
+Use Dashboard ID:
+
+9964
+
+This shows:
+
+Jenkins build status
+
+Build duration
+
+Executor usage
+
+Queue size
+
+6️⃣ Optional (Node Monitoring Dashboard)
+
+For system metrics import:
+
+1860
+
+This dashboard shows:
+
+CPU usage
+
+RAM usage
+
+Disk usage
+
+Network traffic
+
+Using Prometheus Node Exporter
+
+7️⃣ Final Monitoring Architecture
+
+Your setup will look like this:
+
+Jenkins
+   │
+   │ /prometheus metrics
+   ▼
+Prometheus
+   │
+   ▼
+Grafana Dashboards
+
+And Node Exporter provides:
+
+EC2 CPU / RAM / Disk metrics
+
+
