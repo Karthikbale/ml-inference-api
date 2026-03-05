@@ -1,4 +1,4 @@
-**ML Inference API – Dockerized Deployment**
+**ML Inference API – Dockerized Deployment Project**
 
 **📌 Project Overview**
 
