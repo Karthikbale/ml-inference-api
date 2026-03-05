@@ -12,15 +12,15 @@ VScode
 
 2️⃣ Go to Desktop
 
-cd Desktop                      //command
+**cd Desktop**
 
 3️⃣ Create Project Folder
 
-mkdir ml-inference-api
+**mkdir ml-inference-api**
 
-cd ml-inference-api
+**cd ml-inference-api**
 
-dir
+**dir**
 
 
 ✅ STEP 1 — Create Virtual Environment (Very Important)
@@ -41,7 +41,6 @@ If you see (venv) → good.
 
 ✅ STEP 2 — Install Required Libraries
 
-//Creating requirement.txt//
 
 We need:
 
@@ -57,7 +56,7 @@ pandas
 
 Run:
 
-pip install fastapi uvicorn scikit-learn joblib pandas 
+**pip install fastapi uvicorn scikit-learn joblib pandas** 
 
 Wait  until installation completes.
 
@@ -183,6 +182,103 @@ You should get something like:
 
 }
 
-🎉 That means your ML model is now serving predictions via API.
+🎉  ML model is now serving predictions via API.
 
+Means:
 
+✅ FastAPI is running
+✅ Model loaded correctly
+✅ JSON validation working
+✅ Inference working
+✅ API responding properly
+
+ first ML inference API successfully 🎉
+
+ 🚀 Now We Move to DEVOPS MODE
+
+Next step:
+
+✅ STEP 6 — Dockerize the Application
+
+Now we convert this into a container using:
+
+**Docker**
+
+Step 6.1 — Stop Server
+
+In terminal press:
+
+**CTRL + C**
+
+To stop uvicorn.
+
+**Step 6.2 — Create requirements.txt**
+
+Inside  project folder create file:
+
+**requirements.txt**
+
+Paste this inside:
+
+**fastapi
+uvicorn
+scikit-learn
+joblib
+numpy
+pandas**
+
+Save it.
+
+Step 6.3 — Create Dockerfile
+
+Create a new file named:
+
+**Dockerfile**
+
+paste all the docker code in this file 
+
+Step 6.4 — Build Docker Image
+
+Inside project folder run:
+
+**docker build -t ml-inference-api .**
+
+When build finishes, you should see:
+
+Successfully tagged ml-inference-api:latest
+
+✅ STEP 7 — Run the Container
+
+Inside your project folder run:
+
+**docker run -p 8000:8000 ml-inference-api**
+
+Explanation:
+
+-p 8000:8000 → maps container port to your system
+
+ml-inference-api → image name
+
+After running, you should see something like:
+
+Uvicorn running on http://0.0.0.0:8000
+
+✅ STEP 8 — Test From Browser
+
+Open browser and go to:
+
+http://127.0.0.1:8000
+
+You should see:
+
+{"message":"ML Inference API is running"}
+
+✅ STEP 9 — Test Prediction
+
+Open:
+
+http://127.0.0.1:8000/docs
+
+Test /predict like before.
+
+If prediction works → 🎉
