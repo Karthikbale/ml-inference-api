@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "ml-inference-api"
+        SCANNER_HOME = tool 'SonarScanner'
     }
 
     stages {
@@ -20,13 +21,13 @@ pipeline {
                 dir('ml-inference-api') {
                     withSonarQubeEnv('Sonar') {
                         withCredentials([string(credentialsId: 'sonar', variable: 'SONAR_TOKEN')]) {
-                            sh '''
-                            sonar-scanner \
+                            sh """
+                            ${SCANNER_HOME}/bin/sonar-scanner \
                             -Dsonar.projectKey=ml-project \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://sonarqube:9000 \
                             -Dsonar.login=$SONAR_TOKEN
-                            '''
+                            """
                         }
                     }
                 }
@@ -36,18 +37,18 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 dir('ml-inference-api') {
-                    sh 'docker build -t ml-inference-api .'
+                    sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
         }
 
         stage('Deploy Container') {
             steps {
-                sh '''
+                sh """
                 docker stop ml-container || true
                 docker rm ml-container || true
-                docker run -d -p 8000:8000 --name ml-container ml-inference-api
-                '''
+                docker run -d -p 8000:8000 --name ml-container ${IMAGE_NAME}
+                """
             }
         }
     }
