@@ -1,4 +1,4 @@
-GitHub → Jenkins → SonarQube → Docker → ML App → Prometheus → Grafana → AWS EC2
+**AWS EC2 →GitHub → Jenkins → SonarQube → Docker → ML App → Prometheus → Grafana →**
 
 1️⃣ Launch AWS EC2 Ubuntu Server
 
@@ -99,13 +99,14 @@ docker-compose up -d
 Check:
 
 docker ps
+
 8️⃣ Access Jenkins
 
 Open browser:
 
 http://EC2_IP:8080
 
-Get password:
+Get password: docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
 docker logs jenkins
 
@@ -141,6 +142,39 @@ admin
 admin
 
 Create token
+
+<< First Add Credentials in Jenkins
+
+Go to:
+
+Manage Jenkins → Credentials → Global → Add Credentials
+
+GitHub Credentials
+
+Type: Username with Password
+
+ID:
+
+git
+
+Username:
+
+your_github_username
+
+Password:
+
+GitHub Personal Access Token
+SonarQube Token
+
+Type: Secret Text
+
+ID:
+
+sonar-token
+
+Secret:
+
+your_sonarqube_token  >>
 
 1️⃣1️⃣ Configure SonarQube in Jenkins
 
@@ -197,3 +231,4 @@ After pipeline success:
 http://EC2_IP:8000/docs
 
 Swagger UI will appear.
+
