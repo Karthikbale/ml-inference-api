@@ -19,4 +19,16 @@ Runs inside a Docker container
 Is portable and cloud-ready
 
 **🏗 Architecture**
+
 Model Training → FastAPI Application → Docker Container → API Testing
+
+**📂 Project Structure**
+
+ml-inference-api/
+│
+├── train.py              # Model training script
+├── model.pkl             # Trained ML model
+├── app.py                # FastAPI application
+├── requirements.txt      # Python dependencies
+├── Dockerfile            # Docker configuration
+└── README.md
