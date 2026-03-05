@@ -17,6 +17,7 @@ cd Desktop
 3️⃣ Create Project Folder
 
 mkdir ml-inference-api
+
 cd ml-inference-api
 
 dir
@@ -26,11 +27,11 @@ dir
 
 This keeps dependencies clean.
 
-python -m venv venv
+**python -m venv venv**
 
 Activate it:
 
-venv\Scripts\activate
+**venv\Scripts\activate**
 
 You should now see:
 
@@ -39,6 +40,8 @@ You should now see:
 If you see (venv) → good.
 
 ✅ STEP 2 — Install Required Libraries
+
+//Creating requirement.txt//
 
 We need:
 
@@ -54,28 +57,30 @@ pandas
 
 Run:
 
+pip install fastapi uvicorn scikit-learn joblib pandas 
+
 Wait  until installation completes.
 
 ✅ STEP 3 — Create Training Script
 
 Inside this folder, create a file named:
 
-train.py
+**train.py**
 
 Open folder in VS Code:
 
-code .
+**code .**
 
 If code doesn’t work, open VS Code manually and open this folder.
 
-✍️ Inside train.py — Paste code
+**✍️ Inside train.py** — Paste code
 
 
 ✅ STEP 4 — Run Training Script
 
 In terminal (inside project folder, venv active):
 
-  python train.py
+  **python train.py**
 
 You should see:
 
@@ -83,7 +88,7 @@ You should see:
 
 Now run:
 
-  dir
+  **dir**
 
 You must see:
 
@@ -113,7 +118,7 @@ C:\Users\Admin\Desktop\ml-inference-api
 
 Create a new file:
 
-app.py
+**app.py**
 ✍️ Paste This Inside app.py    //paste the code 
 
 ✅ Step 5.2 — Run FastAPI Server
@@ -126,7 +131,7 @@ Virtual environment is activated (venv)
 
 Now run:
 
-uvicorn app:app --reload
+**uvicorn app:app --reload**
 
 You should see something like:
 
@@ -141,6 +146,7 @@ http://127.0.0.1:8000
 You should see:
 
 {"message":"ML Inference API is running"}
+
 ✅ Step 5.4 — Test Prediction Endpoint
 
 Go to:
@@ -156,10 +162,15 @@ Click "Try it out"
 Enter this:
 
 {
+
   "sepal_length": 5.1,
+  
   "sepal_width": 3.5,
+  
   "petal_length": 1.4,
+  
   "petal_width": 0.2
+
 }
 
 Click Execute
@@ -167,7 +178,10 @@ Click Execute
 You should get something like:
 
 {
+
   "prediction": 0
+
 }
 
 🎉 That means your ML model is now serving predictions via API.
+
